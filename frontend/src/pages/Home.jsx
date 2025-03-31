@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+    <div className="w-screen flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 text-white">
       <h1 className="text-4xl font-extrabold mb-6 drop-shadow-lg">Varicose Vein Detection</h1>
 
       <div className="bg-white p-8 rounded-xl shadow-lg text-black w-96">

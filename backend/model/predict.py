@@ -4,7 +4,8 @@ import tensorflow as tf
 import os
 
 # Load Model
-model_path = r"C:\dev\Project2\backend\model\frozen_model\saved_model"
+# model_path = r"C:\dev\Project2\backend\model\frozen_model\saved_model"
+model_path = r"C:\Users\alaka\OneDrive\Desktop\MEC\S8\Final_Web-vericose\backend\model\frozen_model\saved_model"
 model = tf.saved_model.load(model_path) 
 def predict_varicose(image_path):
     img = cv2.imread(image_path)

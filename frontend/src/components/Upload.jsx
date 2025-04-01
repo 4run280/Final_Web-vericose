@@ -42,7 +42,7 @@ const Upload = () => {
         </p>
       )}
       {reportUrl && (
-        <a href={reportUrl} download className="bg-green-600 text-white px-4 py-2 mt-3 rounded-lg">
+        <a href={reportUrl} download className=" text-white px-4 py-2 mt-3 rounded-lg">
           Download Report
         </a>
       )}

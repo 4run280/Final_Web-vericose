@@ -1,3 +1,4 @@
+from ctypes import c_uint8
 from flask import Flask, request, jsonify, send_file
 import os
 import cv2
@@ -6,13 +7,15 @@ import tensorflow as tf
 from werkzeug.utils import secure_filename
 from fpdf import FPDF
 from model.predict import predict_varicose  # Import the prediction function
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS to fix frontend-backend connection issue
 
 UPLOAD_FOLDER = 'static/uploads/'
 REPORT_FOLDER = 'static/reports/'
+PREPROCESSED_FOLDER = 'processed/'
+image_path = 'preprocessed.jpg'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(REPORT_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -24,9 +27,15 @@ def preprocess_image(image_path):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
     img = cv2.equalizeHist(img)  # Apply histogram equalization
     img = img / 255.0  # Normalize pixel values
-    return img
+    img_uint8 = (img * 255).astype(np.uint8)
+    filename = os.path.basename(image_path)
+    save_path = os.path.join(PREPROCESSED_FOLDER, filename)
+    cv2.imwrite(save_path, img_uint8)
+
+    return save_path
 
 @app.route('/upload', methods=['POST'])
+@cross_origin()
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
@@ -40,10 +49,11 @@ def upload_file():
     file.save(filepath)
 
     # Preprocess image
-    processed_image = preprocess_image(filepath)
+    save_path = preprocess_image(filepath)
 
     # Run the model for prediction
-    prediction, confidence, processed_img_path = predict_varicose(filepath)
+    # prediction, confidence, processed_img_path = predict_varicose(filepath)
+    prediction, confidence, processed_img_path = predict_varicose(save_path)
 
     # Generate report
     report_filename = generate_report(filepath, prediction, confidence, processed_img_path)

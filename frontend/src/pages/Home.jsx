@@ -10,7 +10,7 @@ const Home = () => {
         <Upload />
       </div>
 
-      <Link to="/report" className="mt-6 text-lg font-semibold underline hover:text-yellow-400 transition duration-300">
+      <Link to="/report" className="mt-6 text-lg font-semibold underline text-white hover:text-slate-300 transition duration-300">
         Download Report
       </Link>
     </div>

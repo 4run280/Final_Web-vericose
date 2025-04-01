@@ -3,6 +3,8 @@ import { useState } from "react";
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [prediction, setPrediction] = useState("");
+  const [confidence, setConfidence] = useState(null);
+  const [reportUrl, setReportUrl] = useState("");
 
   const handleUpload = async () => {
     if (!file) return alert("Please select a file.");
@@ -17,6 +19,8 @@ const Upload = () => {
 
     const data = await response.json();
     setPrediction(data.prediction);
+    setConfidence(data.confidence);
+    setReportUrl(data.report_url);
   };
 
   return (
@@ -24,18 +28,23 @@ const Upload = () => {
       <input
         type="file"
         onChange={(e) => setFile(e.target.files[0])}
-        className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
+        className="p-2 border border-gray-300 rounded-lg"
       />
       <button
         onClick={handleUpload}
-        className="bg-blue-600 text-white px-4 py-2 mt-3 rounded-lg hover:bg-blue-700 transition"
+        className="bg-blue-600 text-white px-4 py-2 mt-3 rounded-lg"
       >
         Upload & Analyze
       </button>
       {prediction && (
-        <p className="mt-4 bg-gray-200 text-lg p-2 rounded-lg shadow-md">
-          Result: <span className="font-semibold">{prediction}</span>
+        <p className="mt-4 bg-gray-200 text-lg p-2 rounded-lg">
+          Result: {prediction} ({confidence.toFixed(2)}%)
         </p>
+      )}
+      {reportUrl && (
+        <a href={reportUrl} download className="bg-green-600 text-white px-4 py-2 mt-3 rounded-lg">
+          Download Report
+        </a>
       )}
     </div>
   );
